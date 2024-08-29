@@ -44,6 +44,16 @@ options:
         required: false
         default: ''
         type: str
+    zeo_server_address:
+        description: The address of the ZEO server
+        required: false
+        default: f'{target}/var/zeoserver.sock'
+        type: str
+    blob_dir:
+        description: The blob directory
+        required: false
+        default: f'{target}/var/blobstorage'
+        type: str
 """  # noqa: E501
 
 EXAMPLES = r"""
@@ -174,9 +184,9 @@ default-zpublisher-encoding utf-8
     <zeoclient>
       read-only false
       read-only-fallback false
-      blob-dir {target}/var/blobstorage
+      blob-dir {blob_dir}
       shared-blob-dir on
-      server {target}/var/zeo.socket
+      server {zeo_server_address}
       storage 1
       name zeostorage
       cache-size 128MB
@@ -205,6 +215,16 @@ def run_command():
         "additional_zcml": {"required": False, "type": "str", "default": ""},
         "environment_vars": {"required": False, "type": "str", "default": ""},
         "wsgi_template": {"required": False, "type": "str", "default": ""},
+        "zeo_server_address": {
+            "required": False,
+            "type": "str",
+            "default": "{target}/var/zeoserver.sock",
+        },
+        "blob_dir": {
+            "required": False,
+            "type": "str",
+            "default": "",
+        },
     }
     module = AnsibleModule(argument_spec=module_args)
 
@@ -225,10 +245,14 @@ def run_command():
     zcml = module.params.get("zcml", [])
     additional_zcml = module.params.get("additional_zcml", "")
     environment_vars = module.params.get("environment_vars", "")
+    zeo_server_address = (
+        module.params.get("zeo_server_address") or f"{str(target)}/var/zeoserver.sock"
+    )
+    blob_dir = module.params.get("blob_dir") or f"{str(target)}/var/blobstorage"
 
     instance_dirs = [
         "bin",
-        "etc/packages-includes",
+        "etc/package-includes",
         "var",
     ]
     for instance in instances:
@@ -250,7 +274,10 @@ def run_command():
 
         zope_conf_file = base_folder / "etc" / "zope.conf"
         expected_content = _zope_conf_template.format(
-            target=target, environment_vars=environment_vars
+            target=target,
+            environment_vars=environment_vars,
+            zeo_server_address=zeo_server_address,
+            blob_dir=blob_dir,
         )
         if (
             not zope_conf_file.exists()
@@ -259,7 +286,7 @@ def run_command():
             changed = True
             zope_conf_file.write_text(expected_content)
 
-        instance_zcml_folder = base_folder / "etc/packages-includes"
+        instance_zcml_folder = base_folder / "etc/package-includes"
 
         for idx, package in enumerate(zcml):
             zcml_file = instance_zcml_folder / f"1{idx:02d}-{package}.zcml"

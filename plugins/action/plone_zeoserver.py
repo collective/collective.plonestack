@@ -17,11 +17,16 @@ class ActionModule(ActionBase):
         del tmp  # deprecated parameter, it should not be used
 
         module_args = self._task.args.copy()
+        target = Path(module_args["target"]).expanduser().resolve()
+        zeo_server_address = (
+            module_args.get("zeo_server_address") or f"{target}/var/zeo.socket"
+        )
+        blob_dir = module_args.get("blob_dir") or f"{target}/var/blobstorage"
 
         # call the plone_zeoserver_folders module
         plone_zeoserver_folders_results = self._execute_module(
             module_name="collective.plonestack.plone_zeoserver_folders",
-            module_args={"target": module_args["target"]},
+            module_args={"target": str(target)},
             task_vars=task_vars,
         )
 
@@ -53,7 +58,13 @@ class ActionModule(ActionBase):
             shared_loader_obj=self._shared_loader_obj,
         )
         template_action_vars = task_vars.copy()
-        template_action_vars.update({"target": module_args["target"]})
+        template_action_vars.update(
+            {
+                "target": str(target),
+                "zeo_server_address": zeo_server_address,
+                "blob_dir": blob_dir,
+            }
+        )
         template_action_results = template_action.run(task_vars=template_action_vars)
         result.update(template_action_results)
         if template_action_results.get("failed"):

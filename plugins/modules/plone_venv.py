@@ -227,7 +227,10 @@ def run_command():
                 str(requirements_txt),
             ]
         )
-        module.run_command(command)
+        exit_code, stdout, stderr = module.run_command(command)
+        if exit_code != 0:
+            module.fail_json(msg=stderr)
+
         done.append("Installed requirements")
 
     # Check if pip freeze is consistent with the constraints.txt file
@@ -251,11 +254,15 @@ def run_command():
     # Symlink supervisorctl and supervisord
     supervisorctl = bin_folder / "supervisorctl"
     if not supervisorctl.resolve() == target / ".venv/bin/supervisorctl":
+        if supervisorctl.exists():
+            supervisorctl.unlink()
         supervisorctl.symlink_to(target / ".venv/bin/supervisorctl")
         done.append(f"Created symlink {supervisorctl}")
 
     supervisord = bin_folder / "supervisord"
     if not supervisord.resolve() == target / ".venv/bin/supervisord":
+        if supervisord.exists():
+            supervisord.unlink()
         supervisord.symlink_to(target / ".venv/bin/supervisord")
         done.append(f"Created symlink {supervisord}")
 

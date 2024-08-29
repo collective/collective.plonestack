@@ -131,6 +131,37 @@ Example playbook:
     PTS_LANGUAGES en
     ```
 
+- **`deploy_plone_additional_zcml`**
+
+  - **Description**: A list of additional ZCML slugs to include in the buildout configuration.
+  - **Default**: `[]`
+  - **Example**:
+
+    ```yaml
+    deploy_plone_additional_zcml: |
+      <include package="z3c.saconfig" file="meta.zcml" />
+    ```
+
+- **deploy_plone_zeo_server_address**
+
+  - **Description**: The address of the ZEO server.
+  - **Default**: Not set, it will fallback to a f{deploy_plone_target}/var/zeoserver.sock
+  - **Example**:
+
+      ```yaml
+      deploy_plone_zeo_server_address: 192.168.1.1:8100
+      ```
+
+- **deploy_plone_blob_dir**
+
+  - **Description**: The directory where blobs will be stored.
+  - **Default**: Not set, it will fallback to a f{deploy_plone_target}/var/blobstorage
+  - **Example**:
+
+      ```yaml
+      deploy_plone_blob_dir: /var/blobstorage
+      ```
+
 - **`deploy_plone_instances`**
 
   - **Description**: A list of instances to create. Instances are described with dictionaries. More on that in the next section.

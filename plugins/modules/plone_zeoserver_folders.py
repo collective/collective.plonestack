@@ -35,9 +35,9 @@ redirect_stderr = false
 
 def run_command():
     changed = False
-    module_args = dict(
-        target=dict(required=True, type="str"),
-    )
+    module_args = {
+        "target": {"required": True, "type": "str"},
+    }
     module = AnsibleModule(argument_spec=module_args)
 
     target = Path(module.params["target"]).expanduser().resolve()

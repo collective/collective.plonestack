@@ -62,6 +62,18 @@ options:
         required: false
         default: 2
         type: int
+    zeo_server_address:
+        description:
+            - The address of the ZEO server or socket file
+        required: false
+        default: f"{target}/var/zeo.socket"
+        type: str
+    blob_dir:
+        description:
+            - The directory to store the blobs
+        required: false
+        default: f"{target}/var/blobstorage"
+        type: str
 """
 
 EXAMPLES = r"""

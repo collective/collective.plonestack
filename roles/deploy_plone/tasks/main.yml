@@ -35,7 +35,11 @@
     target: "{{ deploy_plone_target }}"
     instances: "{{ deploy_plone_instances }}"
     base_port: "{{ deploy_plone_base_port }}"
+    zcml: "{{ deploy_plone_zcml }}"
+    additional_zcml: "{{ deploy_plone_additional_zcml }}"
     environment_vars: "{{ deploy_plone_environment_vars }}"
+    blob_dir: "{{ deploy_plone_blob_dir }}"
+    zeo_server_address: "{{ deploy_plone_zeo_server_address }}"
 
 - name: "Configure supervisor"
   collective.plonestack.plone_supervisor:

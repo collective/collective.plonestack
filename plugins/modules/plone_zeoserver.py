@@ -11,6 +11,18 @@ options:
             - The target directory where the ZEO server will be installed
         required: true
         type: str
+    zeo_server_address:
+        description:
+            - The address of the ZEO server or socket file
+        required: false
+        default: f"{target}/var/zeo.socket"
+        type: str
+    blob_dir:
+        description:
+            - The directory to store the blobs
+        required: false
+        default: f"{target}/var/blobstorage"
+        type: str
     zeo_conf_template:
         description:
             - The template file to use for the zeo.conf file

@@ -1,8 +1,16 @@
 ---
 deploy_plone_base_port: 8080
-deploy_plone_environment_vars: ""
+deploy_plone_zcml: []
+deploy_plone_additional_zcml: ""
+deploy_plone_environment_vars: |
+  zope_i18n_compile_mo_files true
+  CHAMELEON_CACHE {{ deploy_plone_target }}/var/cache
+  DIAZO_ALWAYS_CACHE_RULES true
+  PTS_LANGUAGES en
 deploy_plone_extra_constraints: {}
 deploy_plone_extra_requirements: []
 deploy_plone_instances:
-  - name: "instance"
+  - name: 'instance'
 deploy_plone_source_checkouts: []
+deploy_plone_zeo_server_address: ""
+deploy_plone_blob_dir: ""

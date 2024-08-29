@@ -1,7 +1,7 @@
 %define INSTANCE {{ target }}/parts/zeo
 
 <zeo>
-  address {{ target }}/var/zeo.socket
+  address {{ zeo_server_address }}
   read-only false
   invalidation-queue-size 100
   pid-filename {{ target }}/var/zeo.pid
@@ -9,7 +9,7 @@
 
 <filestorage 1>
   path {{ target }}/var/filestorage/Data.fs
-  blob-dir {{ target }}/var/blobstorage
+  blob-dir {{ blob_dir }}
 </filestorage>
 
 <eventlog>
