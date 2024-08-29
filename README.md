@@ -148,9 +148,9 @@ Example playbook:
   - **Default**: Not set, it will fallback to a f{deploy_plone_target}/var/zeoserver.sock
   - **Example**:
 
-      ```yaml
-      deploy_plone_zeo_server_address: 192.168.1.1:8100
-      ```
+    ```yaml
+    deploy_plone_zeo_server_address: 192.168.1.1:8100
+    ```
 
 - **deploy_plone_blob_dir**
 
@@ -158,9 +158,9 @@ Example playbook:
   - **Default**: Not set, it will fallback to a f{deploy_plone_target}/var/blobstorage
   - **Example**:
 
-      ```yaml
-      deploy_plone_blob_dir: /var/blobstorage
-      ```
+    ```yaml
+    deploy_plone_blob_dir: /var/blobstorage
+    ```
 
 - **`deploy_plone_instances`**
 
@@ -201,3 +201,8 @@ Instances are described with dictionaries. You can put any key-value pair you wa
 
   - **Description**: The number of threads the instance will use.
   - **Default**: Fallback to the instances `thread` value
+
+- **`skip_supervisor`**
+
+  - **Description**: If set to `true` the instance will not be managed by supervisor.
+  - **Default**: `false`
