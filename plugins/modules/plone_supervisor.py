@@ -54,9 +54,9 @@ files = {target}/etc/supervisord.d/*.conf
 
 def run_module():
     done = []
-    module_args = dict(
-        target=dict(type="str", required=True),
-    )
+    module_args = {
+        "target": {"type": "str", "required": True},
+    }
 
     result = dict(
         original_message="",

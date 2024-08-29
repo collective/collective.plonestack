@@ -101,17 +101,16 @@ def constraints_to_dict(constraints):
 def run_command():
     done = []
 
-    # Define the available arguments/parameters that a user can pass to the module
-    module_args = dict(
-        target=dict(type="str", required=True),
-        python_version=dict(type="str", required=True),
-        constraints=dict(type="list", required=False, default=[]),
-        extra_constraints=dict(type="dict", required=False, default={}),
-        plone_version=dict(type="str", required=True),
-        extra_requirements=dict(type="list", required=False, default=[]),
-        source_checkouts=dict(type="list", required=False, default=[]),
-        use_uv=dict(type="bool", required=False, default=True),
-    )
+    module_args = {
+        "target": {"type": "str", "required": True},
+        "python_version": {"type": "str", "required": True},
+        "constraints": {"type": "list", "required": False, "default": []},
+        "extra_constraints": {"type": "dict", "required": False, "default": {}},
+        "plone_version": {"type": "str", "required": True},
+        "extra_requirements": {"type": "list", "required": False, "default": []},
+        "source_checkouts": {"type": "list", "required": False, "default": []},
+        "use_uv": {"type": "bool", "required": False, "default": True},
+    }
 
     # Create the AnsibleModule object
     module = AnsibleModule(argument_spec=module_args)
