@@ -1,0 +1,42 @@
+---
+- name: "Check if we have custom defined variables"
+  ansible.builtin.include_vars:
+    # dir: etc/ansible
+    dir: "{{ deploy_plone_ansible_etc_dir }}"
+  when: deploy_plone_ansible_etc_dir is defined
+  tags:
+    - always
+
+- name: "Dump all the variables that start with deploy_plone"
+  ansible.builtin.debug:
+    msg: "{{ deploy_plone_target }}"
+  tags:
+    - always
+
+- name: "Install the plone virtualenv"
+  collective.plonestack.plone_venv:
+    target: "{{ deploy_plone_target }}"
+    plone_version: "{{ deploy_plone_version }}"
+    python_version: "{{ deploy_plone_python }}"
+    extra_requirements: "{{ deploy_plone_extra_requirements }}"
+    extra_constraints: "{{ deploy_plone_extra_constraints }}"
+    source_checkouts: "{{ deploy_plone_source_checkouts }}"
+  tags:
+    - virtualenv
+
+- name: "Install the zeo server"
+  collective.plonestack.plone_zeoserver:
+    target: "{{ deploy_plone_target }}"
+  tags:
+    - zeo
+
+- name: "Install the zeo clients"
+  collective.plonestack.plone_zeoinstance:
+    target: "{{ deploy_plone_target }}"
+    instances: "{{ deploy_plone_instances }}"
+    base_port: "{{ deploy_plone_base_port }}"
+    environment_vars: "{{ deploy_plone_environment_vars }}"
+
+- name: "Configure supervisor"
+  collective.plonestack.plone_supervisor:
+    target: "{{ deploy_plone_target }}"

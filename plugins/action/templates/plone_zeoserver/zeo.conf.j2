@@ -1,0 +1,36 @@
+%define INSTANCE {{ target }}/parts/zeo
+
+<zeo>
+  address {{ target }}/var/zeo.socket
+  read-only false
+  invalidation-queue-size 100
+  pid-filename {{ target }}/var/zeo.pid
+</zeo>
+
+<filestorage 1>
+  path {{ target }}/var/filestorage/Data.fs
+  blob-dir {{ target }}/var/blobstorage
+</filestorage>
+
+<eventlog>
+  level info
+  <logfile>
+    path {{ target }}/var/log/zeo.log
+    format %(asctime)s %(message)s
+  </logfile>
+</eventlog>
+
+<runner>
+  program $INSTANCE/bin/runzeo
+  socket-name {{ target }}/var/zeo.zdsock
+  daemon true
+  forever false
+  backoff-limit 10
+  exit-codes 0, 2
+  directory $INSTANCE
+  default-to-interactive true
+
+  # This logfile should match the one in the zeo.conf file.
+  # It is used by zdctl's logtail command, zdrun/zdctl doesn't write it.
+  logfile {{ target }}/var/log/zeo.log
+</runner>
