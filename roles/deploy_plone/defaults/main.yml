@@ -1,6 +1,8 @@
 ---
 deploy_plone_base_port: 8080
-deploy_plone_environment_vars:
+deploy_plone_environment_vars: ""
 deploy_plone_extra_constraints: {}
 deploy_plone_extra_requirements: []
-deploy_plone_instances: []
+deploy_plone_instances:
+  - name: "instance"
+deploy_plone_source_checkouts: []
