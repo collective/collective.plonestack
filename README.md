@@ -13,6 +13,26 @@ Motivations:
 - Ansible can operate locally or on a remote server
 - Creating or modifying ansible tasks is by far easier than creating or modifying buildout recipes
 
+## Installation
+
+The prerequisite for this installation is to have `ansible` installed.
+
+Be sure to have a `requirements.yml` file you can add the following line:
+
+```yaml
+---
+collections:
+  - name: collective.plonestack
+    type: git
+    source: "https://github.com/collective/collective.plonestack.git"
+```
+
+Then you can install the collection with the following command:
+
+```bash
+ansible-galaxy collection install -r requirements.yml
+```
+
 ## Available roles
 
 ### deploy_plone
