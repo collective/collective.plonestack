@@ -65,14 +65,14 @@ EXAMPLES = r"""
   plone_venv:
     target: /opt/plone
     python_version: 3.8
-    plone_version: 6.0.12
+    plone_version: 6.0.13
     extra_requirements:
       - plone.app.debugtoolbar
     source_checkouts:
       - git+https://github.com/plone/plone.app.contenttypes.git@master
     constraints:
-      - https://dist.plone.org/release/6.0.12/constraints.txt
-      - https://example.com/6.0.12/constraints.txt
+      - https://dist.plone.org/release/6.0.13/constraints.txt
+      - https://example.com/6.0.13/constraints.txt
     use_uv: true
 """
 

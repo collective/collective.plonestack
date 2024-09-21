@@ -45,7 +45,7 @@ Example playbook:
     - role: collective.plonestack.deploy_plone
       vars:
         deploy_plone_target: "/opt/plone"
-        deploy_plone_version: "6.0.12"
+        deploy_plone_version: "6.0.13"
         deploy_plone_python: "3.11"
         deploy_plone_extra_requirements:
           - "collective.pdbpp"
@@ -87,7 +87,7 @@ Example playbook:
 
   - **Description**: The version of Plone to install.
   - **Default**: Not set
-  - **Example**: `6.0.12`
+  - **Example**: `6.0.13`
 
 - **`deploy_plone_python`**
 
