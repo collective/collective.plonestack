@@ -189,18 +189,51 @@ def run_command():
 
     # Check that we have a virtual environment
     venv_folder = target / ".venv"
+    python_executable = Path(shutil.which(f"python{python_version}"))
     if not venv_folder.exists():
         # Find the python executable that provides python_version
-        python_executable = Path(shutil.which(f"python{python_version}"))
         if not python_executable:
             module.fail_json(
                 msg=f"Python version {python_version} not found in the system"
             )
             return
+
         command = [python_executable, "-m", "venv", str(venv_folder)]
         module.run_command(command)
         done.append(f"Created virtual environment in {venv_folder}")
-        if use_uv:
+
+    # Check that the virtual environment is consistent with the python version
+    # We will get the python version from the virtual environment and from the python executable
+    command = [str(venv_folder / "bin" / "python"), "--version"]
+    exit_code, stdout, stderr = module.run_command(command)
+    command = [python_executable, "--version"]
+    exit_code2, stdout2, stderr2 = module.run_command(command)
+    if stdout != stdout2:
+        module.fail_json(
+            msg=(
+                f"The python version in the virtual environment {stdout!r} "
+                f"is different from the python version {stdout2!r} "
+                f"of the python executable {python_executable!r} "
+                f"Giving up!"
+            )
+        )
+        return
+
+    # Check if we have the pip module in the virtual environment
+    command = [str(venv_folder / "bin" / "python"), "-m", "pip", "--version"]
+    exit_code, stdout, stderr = module.run_command(command)
+    if exit_code != 0:
+        module.fail_json(
+            msg=(
+                f"The pip module was not found "
+                f"in the virtualenv folder {str(venv_folder)!r}. "
+                f"Check your Python installation"
+            )
+        )
+        return
+
+    if use_uv:
+        if not (venv_folder / "bin" / "uv").exists():
             command = [
                 str(venv_folder / "bin" / "python"),
                 "-m",
@@ -208,7 +241,9 @@ def run_command():
                 "install",
                 "uv",
             ]
-            module.run_command(command)
+            exit_code, stdout, stderr = module.run_command(command)
+            if exit_code != 0:
+                module.fail_json(msg=stderr)
             done.append("Installed uv")
 
     # Run a command to install the requirements respecting the constraints
@@ -227,6 +262,7 @@ def run_command():
             ]
         )
         exit_code, stdout, stderr = module.run_command(command)
+        module.log(f"Command: {' '.join(command)}")
         if exit_code != 0:
             module.fail_json(msg=stderr)
 
