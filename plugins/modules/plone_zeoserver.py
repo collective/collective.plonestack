@@ -15,7 +15,7 @@ options:
         description:
             - The address of the ZEO server or socket file
         required: false
-        default: f"{target}/var/zeo.socket"
+        default: f"{target}/var/zeoserver.sock"
         type: str
     blob_dir:
         description:

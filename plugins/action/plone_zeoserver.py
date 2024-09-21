@@ -19,7 +19,7 @@ class ActionModule(ActionBase):
         module_args = self._task.args.copy()
         target = Path(module_args["target"]).expanduser().resolve()
         zeo_server_address = (
-            module_args.get("zeo_server_address") or f"{target}/var/zeo.socket"
+            module_args.get("zeo_server_address") or f"{target}/var/zeoserver.sock"
         )
         blob_dir = module_args.get("blob_dir") or f"{target}/var/blobstorage"
 
